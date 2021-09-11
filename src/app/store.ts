@@ -1,12 +1,22 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
-
+import { configureStore, ThunkAction, Action, getDefaultMiddleware } from '@reduxjs/toolkit';
+import counterSlice from '../features/counter/counterSlice';
+import authenticationSlice from './../features/authentication/authenticationSlice';
+import createSagaMiddleware from 'redux-saga';
+import rootSaga from './rootSaga';
+const sagaMiddleware = createSagaMiddleware();
+// phần này là của saga
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    counterSlice: counterSlice,
+    authenticationSlice: authenticationSlice,
   },
+  // nghĩa là sử dụng middleware default của redux toolkit và thêm thằng middleware của sage vào nữa
+  // bước này là của saga và nếu chỉ có toolkit thì bỏ khúc này
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleware),
 });
-
+// nếu toolkit không thì khúc này: export default store; là xong
+// tất cả bước ở dưới là của saga
+sagaMiddleware.run(rootSaga);
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
 export type AppThunk<ReturnType = void> = ThunkAction<

@@ -1,57 +1,65 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
+import cityApi from 'api/cityApi';
+import studentApi from 'api/studentApi';
+
+import NotFound from 'components/Common/notfound';
+import PrivateRoute from 'components/Common/privateroute';
+import AdminLayout from 'components/Layout/admin';
+import LoginPage from 'features/authentication/pages/loginpage';
+import React, { useState, useEffect } from 'react';
+import { Route, Switch } from 'react-router';
 import './App.css';
 
 function App() {
+  const getAllStudent = async () => {
+    try {
+      // dispatch({ type: ACTION.LOADING, data: true })
+      const res = await studentApi.getAll({ _limit: 10, _page: 1, _order: 'asc', _sort: '' });
+      console.log(res);
+      // if (res.status === 200) {
+      // }
+      // res.data.forEach((values, index) => {
+      //   if(values.)
+      // })
+      //dispatch({ type: ACTION.LOADING, data: false })
+    } catch (error) {
+      console.log(error);
+      //dispatch({ type: ACTION.LOADING, data: false })
+    }
+  };
+  useEffect(() => {
+    getAllStudent();
+  }, []);
+  const getAllCity = async () => {
+    try {
+      // dispatch({ type: ACTION.LOADING, data: true })
+      const res = await cityApi.getAll();
+      console.log(res);
+      // if (res.status === 200) {
+      // }
+      // res.data.forEach((values, index) => {
+      //   if(values.)
+      // })
+      //dispatch({ type: ACTION.LOADING, data: false })
+    } catch (error) {
+      console.log(error);
+      //dispatch({ type: ACTION.LOADING, data: false })
+    }
+  };
+  useEffect(() => {
+    getAllCity();
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <Switch>
+      <Route path="/" exact>
+        <LoginPage />
+      </Route>
+      <PrivateRoute path="/admin">
+        <AdminLayout />
+      </PrivateRoute>
+      <Route>
+        <NotFound />
+      </Route>
+    </Switch>
   );
 }
 
