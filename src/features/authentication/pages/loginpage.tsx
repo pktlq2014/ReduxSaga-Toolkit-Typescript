@@ -2,6 +2,7 @@ import * as React from 'react';
 import { makeStyles, Button } from '@material-ui/core';
 import { useAppDispatch } from 'app/hooks';
 import { login } from '../authenticationSlice';
+import { useHistory } from 'react-router';
 export interface LoginPageProps {}
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const LoginPage = (props: LoginPageProps) => {
+  const history = useHistory();
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const onClickLogin = () => {
